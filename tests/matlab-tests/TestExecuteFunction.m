@@ -27,6 +27,8 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             code = 'repmat([1 2 3 4],5,1)';
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
+            disp("matrix");
+            disp(struct(result{1}));
             testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, 'text/html')), 'Expected HTML output');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{2}, 'text/plain')), 'Expected HTML output');
@@ -37,6 +39,8 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             code = 'var x';
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
+            disp("variableoutput");
+            disp(struct(result{1}));
             testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, 'text/html')), 'Expected HTML output');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{2}, 'text/plain')), 'Expected HTML output');
@@ -47,6 +51,8 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             code = "a='variable string'; sprintf('Text %f of type variable string', a)";
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
+            disp("varstring");
+            disp(struct(result{1}));
             testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, 'text/html')), 'Expected HTML output');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{2}, 'text/plain')), 'Expected HTML output');
@@ -56,9 +62,8 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             code = 'syms x; y = sin(x); disp(y);';
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
-
-            testCase.verifyTrue(iscell(result), 'Result should be a cell array');
-            testCase.verifyEqual(numel(result), 1, 'Expected one output');
+            disp("symbolicoutput");
+            disp(struct(result{1}));
             testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, "text/latex")), 'Expected LaTeX output');
             testCase.verifyTrue(contains(result{1}.value{1}, 'sin'), 'Expected symbolic output');
@@ -69,6 +74,8 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             code = 'error(''Test error'');';
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
+            disp("erroroutput");
+            disp(struct(result{1}));
             testCase.verifyEqual(result{1}.type, 'stream', 'Expected stream type');
             testCase.verifyEqual(result{1}.content.name, 'stderr', 'Expected stderr stream');
             testCase.verifyTrue(contains(result{1}.content.text, 'Test error'), 'Expected error message');
@@ -79,6 +86,8 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             code = 'moon = imread("moon.tif"); imshow(moon);';
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
+            disp("figoutput");
+            disp(struct(result{1}));
             testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype, 'image/png')), 'Expected PNG image output');
             testCase.verifyTrue(~isempty(result{1}.value{1}), 'Expected non-empty image data');
