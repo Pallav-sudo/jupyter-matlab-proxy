@@ -10,6 +10,10 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             testCase.TestPaths = cellfun(@(relative_path)(fullfile(pwd, relative_path)), {"../../src/jupyter_matlab_kernel/matlab", "../../tests/matlab-tests/"}, 'UniformOutput', false);
             cellfun(@addpath, testCase.TestPaths)
         end
+        function suppressWarnings(testCase)
+            warning('off', 'all');
+            testCase.addTeardown(@() warning('on', 'all'));
+        end        
     end
 
     methods (TestClassTeardown)
