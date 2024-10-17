@@ -86,7 +86,8 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
 
         function testFigureOutput(testCase)
             % Test execution of a code that generates a figure output
-            code = 'moon = imread("moon.tif"); imshow(moon);';
+            %code = 'moon = imread("moon.tif"); imshow(moon);';
+            code = 'figure; plot(1:10); title(''Test Figure'');';
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
             disp("figoutput");
