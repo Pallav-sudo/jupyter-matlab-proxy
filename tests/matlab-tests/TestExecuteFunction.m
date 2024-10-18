@@ -53,23 +53,19 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             result = jupyter.execute(code, kernelId);
             disp("varstring");
             disp(struct(result{1}));
-            % disp(result{1}.content);
             testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, 'text/html')), 'Expected HTML output');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{2}, 'text/plain')), 'Expected HTML output');
         end
         function testSymbolicOutput(testCase)
             %Test execution of a code that generates a symbolic output
-            %code = 'syms x; y = sin(x); disp(y);';
             code = 'x = sym(1/3); disp(x);';
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
             disp("symbolicoutput");
             disp(struct(result{1}));
-            % disp(result{1}.content);
             testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, "text/latex")), 'Expected LaTeX output');
-            %testCase.verifyTrue(contains(result{1}.value{1}, 'sin'), 'Expected symbolic output');
         end
 
         function testErrorOutput(testCase)
@@ -92,10 +88,8 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             result = jupyter.execute(code, kernelId);
             disp("figoutput");
             disp(struct(result{1}));
-            % disp(result{1}.content);
             testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype, 'image/png')), 'Expected PNG image output');
-            % testCase.verifyTrue(~isempty(result{1}.value{1}), 'Expected non-empty image data');
         end
     end
 end
