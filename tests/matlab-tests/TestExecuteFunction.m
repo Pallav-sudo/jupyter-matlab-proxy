@@ -48,11 +48,12 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
 
         function testVariableStringOutput(testCase)
             % Test execution of a code that generates a variable string output
-            code = "a='variable string'; sprintf('Text %f of type variable string', a)";
+            % code = "a='variable string'; sprintf('Text %f of type variable string', a)";
+            code = "A = 1/eps;sprintf('%0.5f',A)"
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
             disp("varstring");
-            disp(struct(result{1}.content));
+            % disp(struct(result{1}.content));
             testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, 'text/html')), 'Expected HTML output');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{2}, 'text/plain')), 'Expected HTML output');
