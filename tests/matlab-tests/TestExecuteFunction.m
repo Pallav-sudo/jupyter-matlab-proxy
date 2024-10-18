@@ -52,7 +52,7 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
             disp("varstring");
-            disp(struct(result{1}.content{1}));
+            disp(struct(result{1}.content));
             testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, 'text/html')), 'Expected HTML output');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{2}, 'text/plain')), 'Expected HTML output');
