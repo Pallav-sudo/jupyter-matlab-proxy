@@ -21,15 +21,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up X11 on Ubuntu
+      - name: Set up virtual display on Ubuntu
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb x11-xserver-utils
-          Xvfb :99 &
+          sudo apt-get install -y xvfb
+          Xvfb :99 -ac &
           echo "DISPLAY=:99" >> $GITHUB_ENV
-          sleep 3
-          xhost +
 
       - name: Set up MATLAB ${{ matrix.matlab-release }}
         # Use MATLAB Actions to get running MATLAB in GitHub Actions
