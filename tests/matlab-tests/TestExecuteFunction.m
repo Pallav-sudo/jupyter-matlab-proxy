@@ -60,7 +60,7 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
         end
         function testSymbolicOutput(testCase)
             %Test execution of a code that generates a symbolic output
-            code = 'setenv("DISPLAY","0.0"); sym(1/3); disp(x);';
+            code = 'setenv("DISPLAY","99"); sym(1/3); disp(x);';
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
             disp("symbolicoutput");
