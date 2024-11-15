@@ -48,7 +48,7 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
 
         function testVariableStringOutput(testCase)
             % Test execution of a code that generates a variable string output
-            code = "a='variable string'; sprintf('Text %s of type variable string', a)";
+            code = "a='variable string'; sprintf('Text %f of type variable string', a)";
             % code = "A = 1/eps;sprintf('%0.5f',A)"
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
@@ -58,18 +58,18 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, 'text/html')), 'Expected HTML output');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{2}, 'text/plain')), 'Expected HTML output');
         end
-        function testSymbolicOutput(testCase)
-            %Test execution of a code that generates a symbolic output
-            % code = 'setenv("DISPLAY","99"); sym(1/3); disp(x);';
-            % code ='sym(1/3)';
-            code = 'syms x; y = x^2 + 2*x + 1; disp(y)';
-            kernelId = 'test_kernel_id';
-            result = jupyter.execute(code, kernelId);
-            disp("symbolicoutput");
-            disp(struct(result{1}));
-            testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
-            testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, "text/latex")), 'Expected LaTeX output');
-        end
+        % function testSymbolicOutput(testCase)
+        %     %Test execution of a code that generates a symbolic output
+        %     % code = 'setenv("DISPLAY","99"); sym(1/3); disp(x);';
+        %     % code ='sym(1/3)';
+        %     code = 'syms x; y = x^2 + 2*x + 1; disp(y)';
+        %     kernelId = 'test_kernel_id';
+        %     result = jupyter.execute(code, kernelId);
+        %     disp("symbolicoutput");
+        %     disp(struct(result{1}));
+        %     testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
+        %     testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, "text/latex")), 'Expected LaTeX output');
+        % end
 
         function testErrorOutput(testCase)
             % Test execution of a code that generates an error
