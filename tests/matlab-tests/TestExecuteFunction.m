@@ -66,7 +66,7 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             kernelId = 'test_kernel_id';
             result = jupyter.execute(code, kernelId);
             disp("symbolicoutput");
-            disp(struct(result{1}));
+            disp(struct(result{1}.content));
             testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
             testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, "text/latex")), 'Expected LaTeX output');
         end
