@@ -42,100 +42,100 @@ jobs:
         with:
           select-by-folder: tests/matlab-tests
 
-  # python_unit_tests:
-  #   env:
-  #     code-cov-py: "3.11"
-  #     code-cov-os: "ubuntu-latest"
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       os: [ubuntu-latest, windows-latest, macos-latest]
-  #       python-version: ["3.8", "3.11"]
+  python_unit_tests:
+    env:
+      code-cov-py: "3.11"
+      code-cov-os: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.8", "3.11"]
 
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: Set up Python ${{ matrix.python-version }}
-  #       uses: actions/setup-python@v4
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
 
-  #     - name: Install dependencies
-  #       # Installing wheel package will slightly speed-up installing dependencies.
-  #       # Installing the package with "[dev]" flag  will install test dependecies as well,
-  #       # enabling us to run pytest.
-  #       run: |
-  #         python3 -m pip install --upgrade pip
-  #         python3 -m pip install wheel pytest
-  #         python3 -m pip install .[dev]
+      - name: Install dependencies
+        # Installing wheel package will slightly speed-up installing dependencies.
+        # Installing the package with "[dev]" flag  will install test dependecies as well,
+        # enabling us to run pytest.
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install wheel pytest
+          python3 -m pip install .[dev]
 
-  #     - name: Lint with black
-  #       run: black --check .
+      - name: Lint with black
+        run: black --check .
 
-  #     - name: Test with pytest
-  #       if: ${{ matrix.python-version != env.code-cov-py }}
-  #       run: python3 -m pytest tests/unit
+      - name: Test with pytest
+        if: ${{ matrix.python-version != env.code-cov-py }}
+        run: python3 -m pytest tests/unit
 
-  #     - name: Test with pytest and get code coverage for Python ${{env.code-cov-py}}
-  #       if: ${{matrix.python-version == env.code-cov-py }}
-  #       run: python3 -m pytest --cov --cov-report=xml tests/unit
+      - name: Test with pytest and get code coverage for Python ${{env.code-cov-py}}
+        if: ${{matrix.python-version == env.code-cov-py }}
+        run: python3 -m pytest --cov --cov-report=xml tests/unit
 
-  #     - name: Persist coverage data to be uploaded if all jobs are successful.
-  #       if: ${{matrix.python-version == env.code-cov-py && matrix.os == env.code-cov-os}}
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: coverage_file
-  #         path: ./coverage.xml
-  #         retention-days: 5
+      - name: Persist coverage data to be uploaded if all jobs are successful.
+        if: ${{matrix.python-version == env.code-cov-py && matrix.os == env.code-cov-os}}
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage_file
+          path: ./coverage.xml
+          retention-days: 5
 
-  # lezer_unit_tests:
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  lezer_unit_tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
-  #   runs-on: ${{ matrix.os }}
-  #   defaults:
-  #     run:
-  #       working-directory: src/jupyter_matlab_labextension/src/lezer-matlab/test/
-  #   env:
-  #     NODE_VERSION: 18
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: src/jupyter_matlab_labextension/src/lezer-matlab/test/
+    env:
+      NODE_VERSION: 18
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-  #     - name: Install node dependencies and build parser
-  #       run: npm install
+      - name: Install node dependencies and build parser
+        run: npm install
 
-  #     - name: Run Lezer tests
-  #       run: npm test
+      - name: Run Lezer tests
+        run: npm test
 
-  # upload_code_coverage:
-  #   name: "Upload Code Coverage using codecov"
-  #   needs: [python_unit_tests]
-  #   if: success()
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+  upload_code_coverage:
+    name: "Upload Code Coverage using codecov"
+    needs: [python_unit_tests]
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: Get coverage files from previous job
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: coverage_file
+      - name: Get coverage files from previous job
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage_file
 
-  #     - name: Upload python coverage report to Codecov
-  #       uses: codecov/codecov-action@v4
-  #       with:
-  #         directory: ./
-  #         name: Python-codecov
-  #         files: ./coverage.xml
-  #         fail_ci_if_error: true
-  #         verbose: true
-  #         token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Upload python coverage report to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          directory: ./
+          name: Python-codecov
+          files: ./coverage.xml
+          fail_ci_if_error: true
+          verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
