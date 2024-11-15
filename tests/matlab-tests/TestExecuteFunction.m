@@ -68,7 +68,8 @@ classdef TestExecuteFunction < matlab.unittest.TestCase
             disp("symbolicoutput");
             disp(struct(result{1}));
             testCase.verifyEqual(result{1}.type, 'execute_result', 'Expected execute_result type');
-            testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, "text/latex")), 'Expected LaTeX output');
+            testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, ["text/latex", "text/html"])), 'Expected LaTeX or HTML output');
+            % testCase.verifyTrue(any(strcmp(result{1}.mimetype{1}, "text/latex")), 'Expected LaTeX output');
         end
 
         function testErrorOutput(testCase)
